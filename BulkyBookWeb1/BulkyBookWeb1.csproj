@@ -28,4 +28,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\BulkyBook1.DataAccess\BulkyBook1.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
