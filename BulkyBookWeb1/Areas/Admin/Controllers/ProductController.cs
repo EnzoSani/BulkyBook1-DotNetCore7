@@ -11,93 +11,81 @@ namespace BulkyBookWeb1.Controllers
 
         public ProductController(IUnitOfWork unitOfWork)
         {
-            _unitOfWork = unitOfWork;    
+            _unitOfWork = unitOfWork;
         }
+
         public IActionResult Index()
         {
-           IEnumerable<Product> objProductList = _unitOfWork.Product.GetAll();
-            return View(objProductList);
+            IEnumerable<CoverType> objCoverTypeList = _unitOfWork.CoverType.GetAll();
+            return View(objCoverTypeList);
         }
-        //Get
-        public IActionResult Create()
+
+        //GET
+        public IActionResult Upsert(int? id)
         {
-            
-            return View();
-        }
-        //Post
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Product obj)
-        {   
-          
-            if (ModelState.IsValid) { 
-            _unitOfWork.Product.Add(obj);
-            _unitOfWork.save();
-                TempData["success"] = "Product created successfully";
-            return RedirectToAction("Index");
-            }
-            return View(obj);
-        }
-        //Get
-        public IActionResult Edit(int? id)
-        {
+            Product product = new();
             if (id == null || id == 0)
             {
-                return NotFound();
+                //create product
+                return View(product);
             }
-
-            var ProductFromDbFirst = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
-
-            if (ProductFromDbFirst == null)
+            else
             {
-                return NotFound();
+                //update product
             }
-            return View(ProductFromDbFirst);
+
+
+            return View(product);
         }
-        //Post
+
+        //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Product obj)
+        public IActionResult Upsert(CoverType obj)
         {
-            
+
             if (ModelState.IsValid)
             {
-                _unitOfWork.Product.Update(obj);
+                _unitOfWork.CoverType.Update(obj);
                 _unitOfWork.save();
-                TempData["success"] = "Product edited successfully";
+                TempData["success"] = "CoverType updated successfully";
                 return RedirectToAction("Index");
             }
             return View(obj);
         }
+
         public IActionResult Delete(int? id)
         {
             if (id == null || id == 0)
             {
                 return NotFound();
             }
+            var CoverTypeFromDbFirst = _unitOfWork.CoverType.GetFirstOrDefault(u => u.Id == id);
 
-            var ProductFromDbFirst = _unitOfWork.Product.GetFirstOrDefault(u=>u.Id==id);
-            if (ProductFromDbFirst == null)
+            if (CoverTypeFromDbFirst == null)
             {
                 return NotFound();
             }
-            return View(ProductFromDbFirst);
+
+            return View(CoverTypeFromDbFirst);
         }
-        //Post
-        [HttpPost, ActionName ("Delete")]
+
+        //POST
+        [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(int? id)
+        public IActionResult DeletePOST(int? id)
         {
-            var obj = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id);
+            var obj = _unitOfWork.CoverType.GetFirstOrDefault(u => u.Id == id);
             if (obj == null)
             {
                 return NotFound();
             }
-                _unitOfWork.Product.Remove(obj);
+
+            _unitOfWork.CoverType.Remove(obj);
             _unitOfWork.save();
-            TempData["success"] = "Product deleted successfully";
+            TempData["success"] = "CoverType deleted successfully";
             return RedirectToAction("Index");
-            
+
         }
     }
 }
