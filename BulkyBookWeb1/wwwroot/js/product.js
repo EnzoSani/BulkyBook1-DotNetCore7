@@ -1,18 +1,20 @@
 ﻿var dataTable;
+
 $(document).ready(function () {
     loadDataTable();
 });
+
 function loadDataTable() {
-    dataTable = $('#tdlData').DataTable({
+    dataTable = $('#tblData').DataTable({
         "ajax": {
             "url":"/Admin/Product/GetAll"
         },
         "columns": [
-            { "data": "title", "with": "15%" },
-            { "data": "isbn", "with": "15%" },
-            { "data": "price", "with": "15%" },
-            { "data": "author", "with": "15%" }
-           
+            { "data": "title", "width": "15%" },
+            { "data": "isbn", "width": "15%" },
+            { "data": "price", "width": "15%" },
+            { "data": "author", "width": "15%" },
+            { "data": "category.name", "width": "15%" },
         ]
     });
 }
