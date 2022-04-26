@@ -1,5 +1,6 @@
 ﻿using BulkyBook1.DataAccess;
 using BulkyBook1.DataAccess.IRepository;
+using BulkyBook1.DataAccess.Repository;
 using BulkyBook1.Models;
 using BulkyBook1.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -21,8 +22,8 @@ namespace BulkyBookWeb1.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<CoverType> objCoverTypeList = _unitOfWork.CoverType.GetAll();
-            return View(objCoverTypeList);
+           
+            return View();
         }
 
         //GET
@@ -123,5 +124,15 @@ namespace BulkyBookWeb1.Controllers
             return RedirectToAction("Index");
 
         }
+        #region API CALLS
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var productList = _unitOfWork.Product.GetAll();
+            return Json(new {data=productList});
+        }
+        #endregion
+
     }
+
 }
