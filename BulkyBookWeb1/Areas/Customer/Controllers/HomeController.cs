@@ -1,21 +1,30 @@
 ﻿using BulkyBook1.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using BulkyBook1.DataAccess.Repository;
+using BulkyBook1.DataAccess.IRepository;
+using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace BulkyBookWeb1.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IUnitOfWork unitOfWork)
         {
             _logger = logger;
+            _unitOfWork = unitOfWork;   
         }
 
         public IActionResult Index()
         {
-            return View();
+            IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category,CoverType");
+
+            return View(productList);
         }
 
         public IActionResult Privacy()
