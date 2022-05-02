@@ -6,6 +6,7 @@ using BulkyBook1.DataAccess.IRepository;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Diagnostics;
+using BulkyBook1.Models.ViewModels;
 
 namespace BulkyBookWeb1.Controllers
 {
@@ -25,6 +26,16 @@ namespace BulkyBookWeb1.Controllers
             IEnumerable<Product> productList = _unitOfWork.Product.GetAll(includeProperties: "Category,CoverType");
 
             return View(productList);
+        }
+        public IActionResult Details(int id)
+        {
+            ShoppingCart objCart = new()
+            {
+                Count = 1,
+                Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id, includeProperties: "Category,CoverType")
+            };
+
+            return View(objCart);
         }
 
         public IActionResult Privacy()
