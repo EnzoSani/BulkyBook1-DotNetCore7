@@ -9,6 +9,7 @@ using System.Collections.Generic;
 
 namespace BulkyBookWeb1.Controllers
 {
+    [Area("Admin")]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
