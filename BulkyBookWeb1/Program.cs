@@ -9,7 +9,7 @@ var connectionString = builder.Configuration.GetConnectionString("ApplicationDbC
 
 
 
-builder.Services.AddDefaultIdentity<IdentityUser>()
+builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();;
 
 // Add services to the container.
