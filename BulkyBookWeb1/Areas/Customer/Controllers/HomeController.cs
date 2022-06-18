@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Diagnostics;
 using BulkyBook1.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace BulkyBookWeb1.Controllers
 {
@@ -28,15 +30,31 @@ namespace BulkyBookWeb1.Controllers
 
             return View(productList);
         }
-        public IActionResult Details(int id)
+        public IActionResult Details(int productId)
         {
             ShoppingCart objCart = new()
             {
                 Count = 1,
-                Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == id, includeProperties: "Category,CoverType")
+                ProductId= productId,
+                Product = _unitOfWork.Product.GetFirstOrDefault(u => u.Id == productId, includeProperties: "Category,CoverType")
             };
 
             return View(objCart);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public IActionResult Details(ShoppingCart shoppingCart)
+        {
+            var claimsIdentity =(ClaimsIdentity) User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            shoppingCart.ApplicationUserId = claim.Value;
+
+            _unitOfWork.ShoppingCart.Add(shoppingCart);
+            _unitOfWork.save();
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()
