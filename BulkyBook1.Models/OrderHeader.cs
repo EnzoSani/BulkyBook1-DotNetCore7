@@ -32,7 +32,7 @@ namespace BulkyBook1.Models
         [Required]
         public string PhoneNumber { get; set; }
         [Required]
-        public string PostalCode { get; set; }
+        public string PostalCode { get; set; } 
         [Required]
         public string StreetAddress { get; set; }
         [Required]
