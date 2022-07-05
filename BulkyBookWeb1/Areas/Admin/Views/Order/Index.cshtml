@@ -1,30 +1,49 @@
 ﻿
-<div class="container p-3">
-    <div class="row p-4">
-       <div class="col-6">
-           <h2 class="text-primary">Order List</h2>
-       </div>
-       <div class="col-6 text-end">
-       </div>
+<div class=" p-3">
+    <div class="d-flex justify-content-between p-4">
+        <div class="p-3">
+            <h2 class="text-primary">Order List</h2>
+        </div>
+        <div class="p-2">
+            <ul class="list-group list-group-horizontal-sm">
+                <a style="text-decoration:none;" asp-controller="Order"
+                   asp-action="Index" asp-route-status="inprocess">
+                   <li class="list-group-item">In Process</li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Order"
+                   asp-action="Index" asp-route-status="Pendeng">
+                   <li class="list-group-item">Payment Pending</li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Order"
+                   asp-action="Index" asp-route-status="Completed">
+                   <li class="list-group-item">Completed</li>
+                </a>
+                <a style="text-decoration:none;" asp-controller="Order"
+                   asp-action="Index" asp-route-status="All">
+                   <li class="list-group-item">All</li>
+                </a>                
+            </ul>
+        </div>
     </div>
+    <br /><br />
 
 
-<table id="tblData" class= "table table-bordered table-striped" style="width:100%">
-    <thead>
-        <tr>
-             <th>ID</th>
-            <th>Name</th>
-            <th>Phone Number</th>
-            <th>Email</th>
-            <th>Status</th>
-            <th>Total</th>
-              <th></th>
-                
-           
-        </tr>
-    </thead>
-    
-</table>
+    <table id="tblData" class="table table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th></th>
+
+
+            </tr>
+        </thead>
+
+    </table>
 </div>
 @section Scripts{
     <script src="~/js/order.js"></script>
