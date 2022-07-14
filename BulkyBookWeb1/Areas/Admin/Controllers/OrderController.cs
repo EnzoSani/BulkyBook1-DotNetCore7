@@ -4,6 +4,7 @@ using BulkyBook1.Models.ViewModels;
 using BulkyBook1.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using System.Security.Claims;
 
 namespace BulkyBookWeb1.Areas.Admin.Controllers
@@ -36,6 +37,7 @@ namespace BulkyBookWeb1.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles =SD.Role_Admin + "," + SD.Role_Employee)]
         [AutoValidateAntiforgeryToken]
         public IActionResult UpdateOrderDetail()
         {
@@ -61,6 +63,7 @@ namespace BulkyBookWeb1.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         [AutoValidateAntiforgeryToken]
         public IActionResult StartProcessing()
         {
@@ -71,6 +74,7 @@ namespace BulkyBookWeb1.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
         [AutoValidateAntiforgeryToken]
         public IActionResult ShipOrder()
         {
@@ -79,12 +83,43 @@ namespace BulkyBookWeb1.Areas.Admin.Controllers
             orderHeader.Carrier = OrderVM.OrderHeader.Carrier;
             orderHeader.OrderStatus = SD.StatusShipped;
             orderHeader.ShippingDate = DateTime.Now;
+            if(orderHeader.PaymentStatus == SD.PaymentStatusDelayedPayment)
+            {
+                orderHeader.PaymentDueDate = DateTime.Now.AddDays(30);
+            }
             _unitOfWork.OrderHeader.Update(orderHeader);
             _unitOfWork.save();
             TempData["Success"] = "Order Shipped Succesfully.";
             return RedirectToAction("Details", "Order", new { orderId = OrderVM.OrderHeader.Id });
         }
 
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin + "," + SD.Role_Employee)]
+        [AutoValidateAntiforgeryToken]
+        public IActionResult CancelOrder()
+        {
+            var orderHeader = _unitOfWork.OrderHeader.GetFirstOrDefault(u => u.Id == OrderVM.OrderHeader.Id, tracked: false);
+            if (orderHeader.PaymentStatus == SD.PaymenStatusApproved)
+            {
+                var options = new RefundCreateOptions
+                {
+                    Reason = RefundReasons.RequestedByCustomer,
+                    PaymentIntent = orderHeader.PaymentIntentId
+                };
+
+                var service = new RefundService();
+                Refund refund = service.Create(options);
+
+                _unitOfWork.OrderHeader.UpdateStatus(orderHeader.Id, SD.StatusCancelled, SD.StatusRefunded);
+            }
+            else
+            {
+                _unitOfWork.OrderHeader.UpdateStatus(orderHeader.Id, SD.StatusCancelled, SD.StatusCancelled);
+            }
+            _unitOfWork.save();
+            TempData["Success"] = "Order Cancelled Succesfully.";
+            return RedirectToAction("Details", "Order", new { orderId = OrderVM.OrderHeader.Id });
+        }
         #region API CALLS
         [HttpGet]
         public IActionResult GetAll(string status)
