@@ -3,6 +3,8 @@ using BulkyBook1.DataAccess.IRepository;
 using BulkyBook1.DataAccess.Repository;
 using BulkyBook1.Models;
 using BulkyBook1.Models.ViewModels;
+using BulkyBook1.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
@@ -10,6 +12,7 @@ using System.Collections.Generic;
 namespace BulkyBookWeb1.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class CompanyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

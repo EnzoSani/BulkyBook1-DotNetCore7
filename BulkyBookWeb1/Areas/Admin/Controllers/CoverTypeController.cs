@@ -1,11 +1,14 @@
 ﻿using BulkyBook1.DataAccess;
 using BulkyBook1.DataAccess.IRepository;
 using BulkyBook1.Models;
+using BulkyBook1.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BulkyBookWeb1.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = SD.Role_Admin)]
     public class CoverTypeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
