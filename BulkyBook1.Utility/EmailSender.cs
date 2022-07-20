@@ -14,7 +14,7 @@ namespace BulkyBook1.Utility
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
            var emailToSend = new MimeMessage();
-            emailToSend.From.Add(MailboxAddress.Parse("HelloBulki@gmail.com"));
+            emailToSend.From.Add(MailboxAddress.Parse("hello@dotnetmastery.com"));
             emailToSend.To.Add(MailboxAddress.Parse(email));
             emailToSend.Subject = subject;
             emailToSend.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = htmlMessage };
@@ -24,7 +24,7 @@ namespace BulkyBook1.Utility
             using (var emailClient = new SmtpClient())
             {
                 emailClient.Connect("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
-                emailClient.Authenticate("HelloBulki@gmail.com", "Zxc123.");
+                emailClient.Authenticate("enzosanabria27@gmail.com", "zhqgnysdgcpqfhuy");
                 emailClient.Send(emailToSend);
                 emailClient.Disconnect(true);
             }
