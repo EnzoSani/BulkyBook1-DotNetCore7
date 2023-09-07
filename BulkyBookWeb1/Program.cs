@@ -39,6 +39,11 @@ builder.Services.AddSession(options =>
 });
 
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    options.AppId = "955859095517534";
+    options.AppSecret = "b36fa8a64fd59ece8b9a762f41c87b7f";
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
