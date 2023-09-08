@@ -194,6 +194,7 @@ namespace BulkyBookWeb1.Areas.Customer.Controllers
             _emailSender.SendEmailAsync(orderHearder.ApplicationUser.Email, "New Order - Bulky Book", "<p>New Order Created</p>");
             List<ShoppingCart> shoppingCarts = _unitOfWork.ShoppingCart.GetAll(u => u.ApplicationUserId ==
             orderHearder.ApplicationUserId).ToList();
+            HttpContext.Session.Clear();
             _unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
             _unitOfWork.save();
             return View(id);
